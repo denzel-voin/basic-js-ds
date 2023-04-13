@@ -20,7 +20,6 @@ class BinarySearchTree {
       this.rootNode = newNode;
       return;
     }
-  
     let currentNode = this.rootNode;
     while (currentNode) {
       if (data === currentNode.data) return;
@@ -73,10 +72,62 @@ class BinarySearchTree {
     // remove line with error and write your code here
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
+  remove(data) {
+    let current = this.rootNode;
+    let parent = null;
+    let direction = '';
+    while (current) {
+      if (data === current.data) {
+        break;
+      }
+      if (data < current.data) {
+        parent = current;
+        current = current.left;
+        direction = 'left';
+      } else {
+        parent = current;
+        current = current.right;
+        direction = 'right';
+      }
+    }
+    if (!current) {
+      return;
+    }
+    if (!current.left && !current.right) {
+      if (!parent) {
+        this.rootNode = null;
+      } else {
+        parent[direction] = null;
+      }
+    }
+    else if (!current.left || !current.right) {
+      const child = current.left || current.right;
+      if (!parent) {
+        this.rootNode = child;
+      } else {
+        parent[direction] = child;
+      }
+    }
+    else {
+      let successorParent = current;
+      let successor = current.right;
+      while (successor.left) {
+        successorParent = successor;
+        successor = successor.left;
+      }
+      if (successorParent !== current) {
+        successorParent.left = successor.right;
+        successor.right = current.right;
+      }
+      successor.left = current.left;
+      if (!parent) {
+        this.rootNode = successor;
+      } else {
+        parent[direction] = successor;
+      }
+    }
     // remove line with error and write your code here
-  }
+  }  
 
   min() {
     throw new NotImplementedError('Not implemented');
